@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<header th:replace="~{/fragments/fragment-entete :: frag-entete}">
+</header>
+
+<main class="container">
+    <div class="row">
+
+        <h4 class="text-center p-3">Détail vente</h4>
+
+        <!--aside image-->
+        <aside class="col-3 ">
+            <!--TODO th src image-->
+
+        </aside>
+
+        <!--détails article-->
+        <div class="col-6 bg-light rounded p-3">
+            <!--nom article-->
+            <h5 class="row mb-5" th:text="${articleDetail.nomArticle}">
+            </h5>
+
+            <!--description-->
+            <div class="row mb-1">
+                <p class="col-4 ">Description :</p>
+                <p class="col-8" th:text="${articleDetail.description}">
+                </p>
+            </div>
+
+            <!--categorie-->
+            <div class="row mb-1">
+                <p class="col-4 ">Catégorie :</p>
+                <p class="col-8" th:text="${articleDetail.categorie.libelle}">
+
+                </p>
+            </div>
+
+            <!--TODO ajouter meilleur encherisseur-->
+            <!--meilleure offre-->
+            <div class="row mb-1">
+                <p class="col-4 ">Meilleure offre :</p>
+                <p class="col-8" >
+                </p>
+            </div>
+
+            <!--mise a prix-->
+            <div class="row mb-1">
+                <p class="col-4 ">Mise à prix :</p>
+                <p class="col-8" th:text="|${articleDetail.miseAPrix} points|">
+                </p>
+            </div>
+
+            <!--date fin-->
+            <div class="row mb-1">
+                <p class="col-4 ">Fin de l'enchère :</p>
+                <p class="col-8" th:text="${#temporals.format(articleDetail.dateFinEncheres, 'dd/MM/yyyy HH:mm')}">
+                </p>
+            </div>
+
+            <!--Retrait-->
+            <div class="row mb-1">
+                <p class="col-4 ">Retrait :</p>
+                <p class="col-8"
+                   th:text="|${articleDetail.lieuRetrait.rue} -
+                   ${articleDetail.lieuRetrait.codePostal}
+                   ${articleDetail.lieuRetrait.ville}|"></p>
+            </div>
+
+            <!--vendeur-->
+            <div class="row mb-1">
+                <p class="col-4 ">Vendeur :</p>
+                <p class="col-8" th:text="${articleDetail.getVendeur().pseudo}">
+
+                </p>
+            </div>
+
+            <!--module encherir-->
+            <!--TODO th:if page encherir-->
+            <form th:action="@{/detail_vente/{id}(id=${articleDetail.noArticle})}"
+                  method="POST" class="row mb-1 justify-content-center"
+                  th:object="${detailVenteDto}">
+                <!--Token CSRF-->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <label for="enchere" class="col-4 col-form-label">Ma proposition :</label>
+                <div class="col">
+                    <input type="number" class="form-control" id="enchere"  th:field="*{propositionEnchere}">
+                </div>
+                <input type="submit" class="col-auto btn btn-secondary">
+                <!--Message succes à l'utilisateur-->
+                <div th:if="${succesPropositionEnchere}" style="color: green; background: #d4edda; padding: 10px; margin: 10px 0;">
+                    <span th:text="${succesPropositionEnchere}"></span>
+                </div>
+                <div class="text-danger"
+                     th:if="${#fields.hasErrors('propositionEnchere')}"
+                     th:each="erreur: ${#fields.errors('propositionEnchere')}" th:text="${erreur}">
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
+</body>
+</html>

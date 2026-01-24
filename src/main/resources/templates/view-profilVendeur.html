@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil vendeur</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<header th:replace="~{/fragments/fragment-entete :: frag-entete}">
+</header>
+<body>
+<main class="container">
+    <h3 class="text-center mb-5 mt-5">Profil du vendeur</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!--Card du formulaire-->
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                        <!--Champs profil-->
+                    <div class="d-flex flex-column align-items-center gap-3">
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="username" class="form-label mb-0">Pseudo :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.pseudo}" id="username" class="form-control border-0" disabled>
+                            </div>
+
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputNom" class="form-label mb-0">Nom :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.nom}" id="inputNom" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputPrenom" class="form-label mb-0">Prénom :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.prenom}" id="inputPrenom" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputEmail" class="form-label mb-0">Email :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.email}" id="inputEmail" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputTel" class="form-label mb-0">Téléphone :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.telephone}" id="inputTel" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputRue" class="form-label mb-0">Rue :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.rue}" id="inputRue" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputCP" class="form-label mb-0">Code Postal :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.codePostal}" id="inputCP" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                        <div class="row align-items-center" style="width: 500px">
+                            <div class="col-4 text-start">
+                                <label for="inputVille" class="form-label mb-0">Ville :</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" th:field="*{profilVendeur.ville}" id="inputVille" class="form-control border-0" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<header th:replace="~{/fragments/fragment-entete :: frag-entete}">
+</header>
+<!--corps de page-->
+<main class="container">
+    <h3 class=" text-center mb-5 mt-5">Liste des enchères</h3>
+
+    <!--formulaire de recherche-->
+    <form class="row p-2 mb-2" th:action="@{/filtre}" method="post">
+        <div class="col">
+            <p class="form-label row">Filtres :</p>
+
+            <!--champ de recherche-->
+            <div class="row p-2">
+                <input class="col-6 form-control" type="search" id="recherche" name="recherche"
+                       placeholder="Le nom de l'article contient">
+            </div>
+
+            <!--selecteur categorie-->
+            <!--TODO th:each categories du select-->
+            <div class="row">
+                <label for="categorie" class="col-3">Categories:</label>
+                <select class="col form-select" name="categorie" id="categorie">
+                    <option value="">Toutes</option>
+                    <option th:each="c : ${encheresDto.getCategories()}" th:value="${c.getNoCategorie()}" th:text="${c.getLibelle()}"></option>
+                </select>
+            </div>
+
+            <!--selecteur filtres achat/vente-->
+            <!--TODO th:if connecté-->
+            <div sec:authorize="isAuthenticated()">
+                <div class="row mt-2">
+                    <!--selecteur filtres achat-->
+                    <div class="col">
+                        <!--radio achat-->
+                        <input type="radio" name="achat_vente" id="achat" value="achat" checked>
+                        <label for="achat">Achat</label>
+
+                        <!--liste checkbox achat-->
+                        <!--TODO js disable checkbox-->
+                        <div class="form-check">
+                            <input class="form-check-input" name="filtresAchat" type="checkbox" value="enchereOuverte" id="enchereOuverte">
+                            <label class="form-check-label" for="enchereOuverte">
+                                Encheres ouvertes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="filtresAchat" type="checkbox" value="mesEncheres" id="mesEncheres">
+                            <label class="form-check-label" for="mesEncheres">
+                                Mes enchères
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="filtresAchat" type="checkbox" value="encheresRemportees" id="encheresRemportees">
+                            <label class="form-check-label" for="encheresRemportees">
+                                Enchères remportées
+                            </label>
+                        </div>
+                    </div>
+                    <!--selecteur filtres vente-->
+                    <div class="col">
+                        <!--radio vente-->
+                        <input type="radio" name="achat_vente" id="vente" value="vente">
+                        <label for="vente">Mes ventes</label>
+
+                        <!--liste checkbox vente-->
+                        <!--TODO js disable checkbox-->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtresVente" value="ventesEnCours" id="ventesEnCours">
+                            <label class="form-check-label" for="ventesEnCours">
+                                Mes ventes en cours
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtresVente" value="ventesEnAttente" id="ventesEnAttente">
+                            <label class="form-check-label" for="ventesEnAttente">
+                                Ventes non débutées
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtresVente" value="ventesTerminees" id="ventesTerminees">
+                            <label class="form-check-label" for="ventesTerminees">
+                                Ventes terminées
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--aside bouton rechercher-->
+        <aside class="col align-content-end">
+            <div class="row justify-content-center">
+                <button class="btn btn-secondary btn-lg col-4" type="submit">Rechercher</button>
+            </div>
+        </aside>
+    </form>
+    <!--liste des articles-->
+    <div class="row row-cols-1 row-cols-md-2 justify-content-around">
+        <div th:each="art : ${encheresDto.getArticles()}" class="card mb-3" style="max-width: 540px;">
+            <div th:if="${session.typeFiltreAchat == 'encheresRemportees'}">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="" class="img-fluid rounded-start" alt="photo article">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 th:text="${art.getNomArticle()}" class="card-title"></h5>
+                            <p th:text="${' Catégorie : '+ art.getCategorie().getLibelle()}" class="card-text" ></p>
+                            <p th:text="${' Prix : '+ art.getMiseAPrix()+' '+'points'}" class="card-text" ></p>
+                            <p th:text="${'Fin de l''enchère : ' + art.getDateFinEncheres().toString()}"></p>
+                            <a th:href="@{/article/venteRemporte/{id}(id=${art.noArticle})}"><p th:text="${'Vente remportée'}"></p></a>
+<!--                            <p  class="card-text"><small class="text-muted">Vendeur : <a th:href="@{/profilVendeur/{id}(id=${art.getVendeur().getNoUtilisateur()})}" th:text="${art.getVendeur().getPseudo()}"></a></small></p>-->
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Vendeur : <span th:text="${art.vendeur.pseudo}"></span>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${session.typeFiltreAchat == 'enchereOuverte'}">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="" class="img-fluid rounded-start" alt="photo article">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 th:text="${art.getNomArticle()}" class="card-title"></h5>
+                        <p th:text="${' Catégorie : '+ art.getCategorie().getLibelle()}" class="card-text" ></p>
+                        <p th:text="${' Prix : '+ art.getMiseAPrix()+' '+'points'}" class="card-text" ></p>
+                        <p th:text="${'Fin de l''enchère : ' + art.getDateFinEncheres().toString()}"></p>
+                        <a th:href="@{/detail_vente/{id}(id=${art.noArticle})}"><p th:text="${'Détail de la vente'}"></p></a>
+<!--                        <p  class="card-text"><small class="text-muted">Vendeur : <a th:href="@{/profilVendeur/{id}(id=${art.getVendeur().getNoUtilisateur()})}" th:text="${art.getVendeur().getPseudo()}"></a></small></p>-->
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Vendeur : <span th:text="${art.vendeur.pseudo}"></span>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div th:if="${session.typeFiltreAchat == 'mesEncheres'}">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="" class="img-fluid rounded-start" alt="photo article">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 th:text="${art.getNomArticle()}" class="card-title"></h5>
+                            <p th:text="${' Catégorie : '+ art.getCategorie().getLibelle()}" class="card-text" ></p>
+                            <p th:text="${' Prix : '+ art.getMiseAPrix()+' '+'points'}" class="card-text" ></p>
+                            <p th:text="${'Fin de l''enchère : ' + art.getDateFinEncheres().toString()}"></p>
+                            <a th:href="@{/enchereRemportee/{id}(id=${art.noArticle})}"><p th:text="${'Enchère remportée par'}"></p></a>
+<!--                            <p  class="card-text"><small class="text-muted">Vendeur : <a th:href="@{/profilVendeur/{id}(id=${art.getVendeur().getNoUtilisateur()})}" th:text="${art.getVendeur().getPseudo()}"></a></small></p>-->
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Vendeur : <span th:text="${art.vendeur.pseudo}"></span>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${session.typeFiltreAchat != 'encheresRemportees' && session.typeFiltreAchat != 'enchereOuverte' && session.typeFiltreAchat != 'mesEncheres'}">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="" class="img-fluid rounded-start" alt="photo article">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 th:text="${art.getNomArticle()}" class="card-title"></h5>
+                            <p th:text="${' Catégorie : '+ art.getCategorie().getLibelle()}" class="card-text" ></p>
+                            <p th:text="${' Prix : '+ art.getMiseAPrix()+' '+'points'}" class="card-text" ></p>
+                            <p th:text="${'Fin de l''enchère : ' + art.getDateFinEncheres().toString()}"></p>
+<!--                            <p  class="card-text"><small class="text-muted">Vendeur : <a th:href="@{/profilVendeur/{id}(id=${art.getVendeur().getNoUtilisateur()})}" th:text="${art.getVendeur().getPseudo()}"></a></small></p>-->
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Vendeur : <span th:text="${art.vendeur.pseudo}"></span>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--pied de page-->
+<footer></footer>
+</body>
+</html>

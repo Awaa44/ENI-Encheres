@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enchère Remportée</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/venteRemportee.css}">
+</head>
+<body>
+<div class="vente-page">
+
+    <strong><h3 class="vente-titre" th:text="${enchereRemportee.getVendeur().getPseudoGagnant() + ' ' + 'a remporté l''enchere' }"></h3></strong>
+
+    <div class="vente-contenu">
+
+        <!-- Image -->
+        <div class="vente-image">
+            <img src="/images/article-default.jpg" alt="Image article">
+        </div>
+
+        <!-- Infos -->
+        <div class="vente-infos">
+            <p class="vente-nom" th:text="${enchereRemportee.getNomArticle()}"></p>
+            <p><strong>Description :</strong></p>
+            <p th:text="${enchereRemportee.getDescription()}"></p>
+            <p><strong>Meilleure offre :</strong>
+                <span th:text="${enchereRemportee.getPrixVente()+ ' ' + 'pts' + ' ' + 'par' + ' ' + enchereRemportee.getVendeur().getPseudoGagnant() }"></span>
+            </p>
+            <p><strong>Mise à prix :</strong>
+                <span th:text="${enchereRemportee.getMiseAPrix()}"></span> points
+            </p>
+            <p><strong>Fin de l'enchère :</strong><br>
+                <span th:text="${enchereRemportee.getDateFinEncheres()}"></span>
+            </p>
+            <br>
+            <p><strong>Retrait :</strong><br>
+                <span th:text="${enchereRemportee.getLieuRetrait().getAdresseConcat()}"></span>
+            </p>
+            <br>
+            <p><strong>Vendeur :</strong>
+                <span th:text="${enchereRemportee.getVendeur().getPseudo()}"></span>
+            </p>
+        </div>
+    </div>
+    <div class="vente-bouton">
+        <a th:href="@{/accueil}" class="btn btn-outline-dark">Retrait effectué</a>
+    </div>
+</div>
+</body>
+</html>

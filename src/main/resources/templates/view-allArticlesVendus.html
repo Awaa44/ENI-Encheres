@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<header th:replace="~{/fragments/fragment-entete :: frag-entete}">
+</header>
+
+<main class="container">
+    <div class="row">
+
+        <h4 class="text-center p-3">Tous les articles</h4>
+
+
+        <!--détails article-->
+        <div class="col-6 bg-light rounded p-3" th:each="article : ${articles}">
+            <!--nom article-->
+            <h5 class="row mb-5" th:text="${article.nomArticle}">
+            </h5>
+
+            <!--description-->
+            <div class="row mb-1">
+                <p class="col-4 ">Description :</p>
+                <p class="col-8" th:text="${article.description}">
+                </p>
+            </div>
+
+            <!--categorie-->
+            <div class="row mb-1">
+                <p class="col-4 ">Catégorie :</p>
+                <p class="col-8" th:text="${article.categorie.libelle}">
+                </p>
+            </div>
+
+            <!--lien vers le produit-->
+            <div class="row mb-1">
+                <p class="col-4 ">Lien :</p>
+                <a class="col-8" th:href="@{/detail_vente/{id}(id=${article.noArticle})}">
+                    Voir les détails
+                </a>
+            </div>
+
+        </div>
+    </div>
+</main>
+</body>
+</html>
